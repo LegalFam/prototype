@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><title>Guía de estilo — LegalFam</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { width:1280px; background:#fff; color:#222; font-family:'Outfit', sans-serif; padding:36px 44px; }
+  h1 { font-family:'Cormorant Garamond', serif; font-weight:500; font-size:40px; }
+  h2 { font-size:13px; letter-spacing:3px; text-transform:uppercase; color:#8B6914; margin:26px 0 12px; }
+  .sub { color:#666; font-size:15px; margin-top:4px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+  .sw { display:flex; gap:10px; flex-wrap:wrap; }
+  .c { width:118px; }
+  .c i { display:block; height:62px; border-radius:10px; border:1px solid #ccc; }
+  .c b { display:block; font-size:12px; font-weight:500; margin-top:6px; }
+  .c span { font-size:12px; color:#666; font-family:Consolas, monospace; }
+  .type { display:flex; flex-direction:column; gap:10px; }
+  .type div { display:flex; align-items:baseline; gap:16px; }
+  .type small { width:200px; color:#666; font-size:12px; flex:none; }
+  .panel { border-radius:18px; padding:22px; display:flex; flex-direction:column; gap:14px; }
+  .clasico { --accent:#C9A84C; --accent-light:#E8C96A; --bg:#0A0A0A; --bg2:#111111; --bg3:#181818; --text:#F0E6C8; --text2:#A89060; --ink:#0A0A0A;
+             --border:rgba(201,168,76,.25); background:var(--bg); color:var(--text); }
+  .moderno { --accent:#C2A56B; --accent-light:#D8BE8A; --bg:#121924; --bg2:#172029; --bg3:#1E2833; --text:#ECE7DA; --text2:#A9A38F; --ink:#131A24;
+             --border:rgba(194,165,107,.25); background:var(--bg); color:var(--text); }
+  .panel .t { font-family:'Cormorant Garamond', serif; font-size:30px; }
+  .panel .t em { color:var(--accent); }
+  .eyebrow { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); }
+  .btns { display:flex; gap:10px; align-items:center; }
+  .btn-accent { padding:9px 22px; background:var(--accent); color:var(--ink); border-radius:10px; font-size:15px; font-weight:500; letter-spacing:.5px; }
+  .btn-accent.h { background:var(--accent-light); }
+  .btn-ghost { padding:9px 22px; border:.5px solid var(--border); color:var(--text2); border-radius:10px; font-size:15px; letter-spacing:.5px; }
+  .field { border:.5px solid var(--border); background:var(--bg2); color:var(--text2); border-radius:10px; padding:10px 14px; font-size:14px; }
+  .msg { background:var(--bg3); border:.5px solid var(--border); border-radius:18px; padding:14px 16px; font-size:14px; line-height:1.5; }
+  .src { border-left:3px solid var(--accent); padding:6px 10px; background:var(--bg2); border-radius:0 10px 10px 0; font-size:13px; color:var(--text2); margin-top:8px; }
+  .err { background:rgba(226,75,74,.10); border:.5px solid rgba(226,75,74,.35); border-left:3px solid #E24B4A; border-radius:10px; padding:9px 14px; font-size:13px; color:#F5A5A5; }
+  .ok { color:#1D9E75; font-size:13px; }
+  .tokens { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; font-size:13px; }
+  .tokens div { border:1px solid #ddd; border-radius:10px; padding:10px 12px; }
+  .tokens b { display:block; font-weight:500; }
+  .tokens span { color:#666; }
+</style></head>
+<body>
+  <h1>Guía de estilo — LegalFam</h1>
+  <div class="sub">Tokens de diseño del frontend (variables CSS de <code>themes/dorado.css</code>, <code>themes/toga.css</code> e <code>index.css</code>).</div>
+
+  <div class="grid">
+    <div>
+      <h2>Tema Clásico (predeterminado)</h2>
+      <div class="sw">
+        <div class="c"><i style="background:#0A0A0A"></i><b>Fondo</b><span>#0A0A0A</span></div>
+        <div class="c"><i style="background:#181818"></i><b>Superficie</b><span>#181818</span></div>
+        <div class="c"><i style="background:#C9A84C"></i><b>Acento</b><span>#C9A84C</span></div>
+        <div class="c"><i style="background:#E8C96A"></i><b>Acento hover</b><span>#E8C96A</span></div>
+        <div class="c"><i style="background:#F0E6C8"></i><b>Texto</b><span>#F0E6C8</span></div>
+        <div class="c"><i style="background:#A89060"></i><b>Texto secundario</b><span>#A89060</span></div>
+      </div>
+    </div>
+    <div>
+      <h2>Tema Moderno</h2>
+      <div class="sw">
+        <div class="c"><i style="background:#121924"></i><b>Fondo</b><span>#121924</span></div>
+        <div class="c"><i style="background:#1E2833"></i><b>Superficie</b><span>#1E2833</span></div>
+        <div class="c"><i style="background:#C2A56B"></i><b>Acento</b><span>#C2A56B</span></div>
+        <div class="c"><i style="background:#D8BE8A"></i><b>Acento hover</b><span>#D8BE8A</span></div>
+        <div class="c"><i style="background:#ECE7DA"></i><b>Texto</b><span>#ECE7DA</span></div>
+        <div class="c"><i style="background:#A9A38F"></i><b>Texto secundario</b><span>#A9A38F</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div>
+      <h2>Tipografía</h2>
+      <div class="type">
+        <div><small>Título de sección · Cormorant Garamond 400 · 35–55 px</small><span style="font-family:'Cormorant Garamond'; font-size:40px">Elige tu plan</span></div>
+        <div><small>Énfasis · Cormorant Garamond itálica</small><span style="font-family:'Cormorant Garamond'; font-style:italic; font-size:32px; color:#8B6914">justicia</span></div>
+        <div><small>Cuerpo · Outfit 300–400 · 20 px</small><span style="font-size:20px; font-weight:300">Orientación clara y accesible.</span></div>
+        <div><small>Botones y campos · Outfit 500 · 16 px</small><span style="font-size:16px; font-weight:500">Enviar consulta</span></div>
+        <div><small>Etiqueta superior · Outfit · 14 px · tracking 3 px</small><span style="font-size:14px; letter-spacing:3px; text-transform:uppercase; color:#8B6914">Planes</span></div>
+      </div>
+      <h2>Estados y medidas</h2>
+      <div class="sw">
+        <div class="c"><i style="background:#E24B4A"></i><b>Error</b><span>#E24B4A</span></div>
+        <div class="c"><i style="background:#1D9E75"></i><b>Éxito</b><span>#1D9E75</span></div>
+      </div>
+      <div class="tokens" style="margin-top:14px">
+        <div><b>Radio</b><span>10 · 18 · 25 px</span></div>
+        <div><b>Transición</b><span>0.15 s · 0.25 s</span></div>
+        <div><b>Ancho máximo</b><span>1500 px</span></div>
+        <div><b>Borde</b><span>0.5 px, acento al 25 %</span></div>
+      </div>
+    </div>
+    <div>
+      <h2>Componentes</h2>
+      <div class="grid" style="gap:14px">
+        <div class="panel clasico">
+          <span class="eyebrow">Clásico</span>
+          <div class="t">Tu derecho a la <em>justicia</em></div>
+          <div class="btns"><span class="btn-accent">Comenzar</span><span class="btn-ghost">Ver más</span></div>
+          <div class="field">Escribe tu consulta legal...</div>
+          <div class="msg">Puedes solicitar la pensión ante el Juzgado de Paz Letrado.<div class="src">Código Civil · Art. 474</div></div>
+          <div class="err">No se pudo enviar tu consulta.</div>
+        </div>
+        <div class="panel moderno">
+          <span class="eyebrow">Moderno</span>
+          <div class="t">Tu derecho a la <em>justicia</em></div>
+          <div class="btns"><span class="btn-accent">Comenzar</span><span class="btn-ghost">Ver más</span></div>
+          <div class="field">Escribe tu consulta legal...</div>
+          <div class="msg">Puedes solicitar la pensión ante el Juzgado de Paz Letrado.<div class="src">Código Civil · Art. 474</div></div>
+          <div class="ok">✓ Valoración guardada.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body></html>

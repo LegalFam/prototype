@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>LegalFam — Prototipo navegable (wireframes)</title>
+<style>
+  :root { --ink:#333; --line:#8a8a8a; --soft:#d9d9d9; --fill:#efefef; --paper:#fff; --hot:#2f6fdb; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:"Segoe UI", Arial, sans-serif; color:var(--ink); background:#c9c9c9; }
+  .toolbar { position:sticky; top:0; z-index:10; display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+             padding:8px 12px; background:#2b2b2b; color:#eee; font-size:13px; }
+  .toolbar a { color:#eee; text-decoration:none; padding:3px 8px; border:1px solid #555; border-radius:4px; }
+  .toolbar a.on { background:#eee; color:#222; }
+  .toolbar label { margin-left:auto; }
+  .stage { display:flex; justify-content:center; padding:16px; }
+  body.shot .toolbar { display:none; }
+  body.shot .stage { padding:0; background:var(--paper); }
+  .frame { width:1280px; height:800px; background:var(--paper); border:1px solid var(--line); position:relative; overflow:hidden; }
+  body.shot .frame { border:none; }
+  .screen { display:none; height:100%; }
+  .screen.on { display:flex; flex-direction:column; }
+
+  .box { border:1.5px solid var(--line); border-radius:6px; background:var(--paper); }
+  .fill { background:var(--fill); }
+  .img { border:1.5px solid var(--line); background:
+         linear-gradient(to top right, transparent calc(50% - 1px), var(--line) 50%, transparent calc(50% + 1px)),
+         linear-gradient(to top left, transparent calc(50% - 1px), var(--line) 50%, transparent calc(50% + 1px)), var(--fill); }
+  .bar { height:10px; background:var(--soft); border-radius:5px; margin:7px 0; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; height:38px; padding:0 18px; border:1.5px solid var(--ink);
+         border-radius:6px; font-size:14px; background:var(--paper); white-space:nowrap; }
+  .btn.primary { background:#555; color:#fff; border-color:#555; }
+  .btn.sm { height:30px; padding:0 12px; font-size:13px; }
+  .field { border:1.5px solid var(--line); border-radius:6px; height:38px; padding:0 12px; display:flex; align-items:center;
+           color:#999; font-size:14px; background:var(--paper); }
+  .label { font-size:12px; color:#666; margin:10px 0 4px; }
+  .eyebrow { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#777; }
+  .h1 { font-size:44px; font-weight:600; line-height:1.1; }
+  .h2 { font-size:26px; font-weight:600; }
+  .h3 { font-size:17px; font-weight:600; }
+  .muted { color:#777; font-size:13px; line-height:1.5; }
+  .row { display:flex; gap:12px; align-items:center; }
+  .col { display:flex; flex-direction:column; }
+  .grow { flex:1; }
+  .pill { display:inline-block; border:1.5px solid var(--line); border-radius:999px; padding:4px 12px; font-size:12px; }
+  .note { position:absolute; font-size:11px; color:#b03a2e; border:1px dashed #b03a2e; padding:2px 6px; background:#fff7f5; }
+
+  [data-go] { cursor:pointer; }
+  body.hot [data-go] { outline:2px dashed var(--hot); outline-offset:2px; }
+
+  .nav { height:64px; border-bottom:1.5px solid var(--line); display:flex; align-items:center; gap:22px; padding:0 32px; font-size:14px; }
+  .logo { display:flex; align-items:center; gap:8px; font-weight:700; letter-spacing:2px; }
+  .logo i { width:28px; height:28px; display:block; }
+  .lang { border:1.5px solid var(--line); border-radius:6px; padding:4px 10px; font-size:13px; }
+  .overlay { position:absolute; inset:0; background:rgba(0,0,0,.35); display:flex; align-items:center; justify-content:center; }
+  .modal { width:440px; padding:28px; }
+
+  .chat { display:flex; flex:1; min-height:0; }
+  .side { width:270px; border-right:1.5px solid var(--line); padding:14px; display:flex; flex-direction:column; gap:10px; }
+  .topbar { height:56px; border-bottom:1.5px solid var(--line); display:flex; align-items:center; gap:14px; padding:0 18px; font-size:14px; }
+  .main { flex:1; display:flex; flex-direction:column; min-width:0; }
+  .msgs { flex:1; padding:22px 120px; display:flex; flex-direction:column; gap:14px; overflow:hidden; }
+  .bubble { padding:14px 16px; }
+  .me { align-self:flex-end; max-width:60%; background:var(--fill); }
+  .chip { border:1.5px solid var(--line); border-radius:999px; padding:7px 14px; font-size:13px; }
+  .input { border-top:1.5px solid var(--line); padding:12px 120px 14px; }
+  .src { border-left:4px solid var(--line); padding:8px 12px; margin-top:8px; }
+  .stars { letter-spacing:4px; font-size:18px; color:#888; }
+  .alert { border:2px solid #777; border-radius:6px; padding:10px 14px; background:#f6f6f6; }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <strong>LegalFam · prototipo de baja fidelidad</strong>
+  <a href="#inicio">Inicio</a><a href="#planes">Planes</a><a href="#login">Iniciar sesión</a><a href="#registro">Crear cuenta</a>
+  <a href="#chat">Chat</a><a href="#respuesta">Respuesta</a><a href="#proteccion">Apoyo especializado</a>
+  <a href="#contactos">Contactos</a><a href="#configuracion">Configuración</a>
+  <label><input type="checkbox" id="hot"> Mostrar zonas clicables</label>
+</div>
+<div class="stage"><div class="frame">
+
+<!-- INICIO -->
+<section class="screen" id="s-inicio">
+  <div class="nav">
+    <div class="logo"><i class="img"></i>LEGALFAM</div>
+    <span class="grow"></span>
+    <span>Sobre nosotros</span><span>Cómo funciona</span><span data-go="planes">Precios</span><span>Seguridad</span><span>Privacidad</span>
+    <span class="lang">ES ▾</span>
+    <span class="btn sm" data-go="login">Iniciar sesión</span><span class="btn sm primary" data-go="registro">Registrarse</span>
+  </div>
+  <div class="row" style="flex:1; padding:40px 60px; gap:60px; align-items:flex-start">
+    <div class="col grow" style="gap:18px; padding-top:20px">
+      <span class="pill" style="align-self:flex-start">● Derecho de Familia en el Perú</span>
+      <div class="h1">Tu derecho a la <u>justicia</u><br>no tiene precio.</div>
+      <div class="muted" style="font-size:15px; max-width:560px">Orientación jurídica en Derecho de Familia automatizada, clara y accesible para alimentos, tenencia, filiación y medidas de protección, disponible las 24 horas.</div>
+      <div class="row"><span class="btn primary" data-go="registro">Comenzar →</span><span class="btn">Ver cómo funciona</span></div>
+      <div class="row muted" style="margin-top:30px">◻ ISO/IEC 27001 · ◻ Ley N. 29733 · ◻ Proyecto UPC 2026</div>
+    </div>
+    <div class="col" style="width:320px; gap:16px; padding-top:30px">
+      <div class="box bubble"><div class="h2">+80%</div><div class="muted">Precisión validada</div></div>
+      <div class="box bubble"><div class="h2">24/7</div><div class="muted">Disponibilidad</div></div>
+      <div class="box bubble"><div class="h2">100%</div><div class="muted">Gratuito</div></div>
+    </div>
+  </div>
+  <div class="row" style="padding:0 60px 30px; gap:16px">
+    <div class="box fill grow bubble"><div class="eyebrow">Proceso</div><div class="h3">1. Escribe tu consulta</div><div class="bar"></div></div>
+    <div class="box fill grow bubble"><div class="eyebrow">Proceso</div><div class="h3">2. El sistema busca en la norma</div><div class="bar"></div></div>
+    <div class="box fill grow bubble"><div class="eyebrow">Proceso</div><div class="h3">3. Recibe la orientación con fuentes</div><div class="bar"></div></div>
+  </div>
+</section>
+
+<!-- PLANES -->
+<section class="screen" id="s-planes">
+  <div class="nav">
+    <div class="logo" data-go="inicio"><i class="img"></i>LEGALFAM</div>
+    <span class="grow"></span>
+    <span>Sobre nosotros</span><span>Cómo funciona</span><span><b>Precios</b></span><span>Seguridad</span><span>Privacidad</span>
+    <span class="lang">ES ▾</span>
+    <span class="btn sm" data-go="login">Iniciar sesión</span><span class="btn sm primary" data-go="registro">Registrarse</span>
+  </div>
+  <div class="col" style="align-items:center; padding:30px 60px 0; gap:8px">
+    <div class="eyebrow">Planes</div>
+    <div class="h2">Elige tu plan</div>
+    <div class="muted" style="text-align:center; max-width:640px">El asistente es el mismo en todos los planes. Cambian la capacidad mensual, la memoria de la conversación y el historial disponible.</div>
+  </div>
+  <div style="padding:22px 140px">
+    <table style="width:100%; border-collapse:collapse; font-size:14px">
+      <tr style="height:70px"><td style="width:28%" class="muted">Característica</td>
+        <td class="box" style="text-align:center"><b>Plan gratuito</b><br><span class="h2">S/ 0</span> / mes</td>
+        <td class="box fill" style="text-align:center"><span class="pill">Más popular</span><br><b>Plan Básico</b><br><span class="h2">S/ 14.99</span> / mes</td>
+        <td class="box" style="text-align:center"><b>Plan Premium</b><br><span class="h2">S/ 49.99</span> / mes</td></tr>
+      <tr style="height:40px; border-bottom:1px solid var(--soft)"><td>Tokens mensuales</td><td align="center">50</td><td align="center" class="fill">500</td><td align="center">2 500</td></tr>
+      <tr style="height:40px; border-bottom:1px solid var(--soft)"><td>Memoria de la conversación</td><td align="center">10 mensajes</td><td align="center" class="fill">15 mensajes</td><td align="center">25 mensajes</td></tr>
+      <tr style="height:40px; border-bottom:1px solid var(--soft)"><td>Historial disponible</td><td align="center">30 días</td><td align="center" class="fill">Completo</td><td align="center">Completo</td></tr>
+      <tr style="height:40px; border-bottom:1px solid var(--soft)"><td>Asistente, fuentes legales citadas y calificación</td><td align="center">✓</td><td align="center" class="fill">✓</td><td align="center">✓</td></tr>
+      <tr style="height:64px"><td></td>
+        <td align="center"><span class="btn" data-go="registro">Empezar gratis</span></td>
+        <td align="center" class="fill"><span class="btn primary">Suscribirse</span></td>
+        <td align="center"><span class="btn">Suscribirse</span></td></tr>
+    </table>
+    <div class="muted" style="text-align:center; margin-top:10px">Los precios incluyen IGV. Puedes cancelar tu suscripción en cualquier momento.</div>
+  </div>
+</section>
+
+<!-- LOGIN -->
+<section class="screen" id="s-login">
+  <div class="nav"><div class="logo"><i class="img"></i>LEGALFAM</div><span class="grow"></span><span class="bar" style="width:520px"></span></div>
+  <div class="grow fill"></div>
+  <div class="overlay">
+    <div class="box modal col" style="gap:4px">
+      <div class="row"><div class="h2 grow">Iniciar sesión</div><span data-go="inicio">✕</span></div>
+      <div class="muted">Accede a tu cuenta para continuar</div>
+      <div class="label">Correo electrónico</div><div class="field">tucorreo@ejemplo.com</div>
+      <div class="label">Contraseña</div><div class="field">••••••••<span class="grow"></span>◉</div>
+      <div class="muted" style="text-align:right; margin:8px 0"><u>¿Olvidaste tu contraseña?</u></div>
+      <span class="btn primary" data-go="chat">Ingresar</span>
+      <div class="muted" style="text-align:center; margin-top:12px">¿No tienes cuenta? <u data-go="registro">Regístrate gratis</u></div>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTRO -->
+<section class="screen" id="s-registro">
+  <div class="nav"><div class="logo"><i class="img"></i>LEGALFAM</div><span class="grow"></span><span class="bar" style="width:520px"></span></div>
+  <div class="grow fill"></div>
+  <div class="overlay">
+    <div class="box modal col" style="gap:2px; width:480px">
+      <div class="row"><div class="h2 grow">Crear cuenta</div><span data-go="inicio">✕</span></div>
+      <div class="muted">Regístrate gratis y empieza a consultar</div>
+      <div class="row"><div class="grow"><div class="label">Nombre</div><div class="field">María</div></div><div class="grow"><div class="label">Apellido</div><div class="field">García</div></div></div>
+      <div class="label">Correo electrónico</div><div class="field">tucorreo@ejemplo.com</div>
+      <div class="label">Contraseña</div><div class="field">Mínimo 8 caracteres</div>
+      <div class="label">Confirmar contraseña</div><div class="field">Repite tu contraseña</div>
+      <div class="muted" style="margin:10px 0">☐ Acepto los <u>Términos y Condiciones</u> y el tratamiento de mis datos personales.</div>
+      <div class="box fill muted" style="padding:8px 10px; font-size:12px">Tus datos se tratan conforme a la Ley N.° 29733.</div>
+      <span class="btn primary" style="margin-top:12px" data-go="verifica">Crear cuenta gratis</span>
+      <div class="muted" style="text-align:center; margin-top:10px">¿Ya tienes cuenta? <u data-go="login">Inicia sesión</u></div>
+    </div>
+  </div>
+</section>
+
+<!-- VERIFICA -->
+<section class="screen" id="s-verifica">
+  <div class="nav"><div class="logo"><i class="img"></i>LEGALFAM</div><span class="grow"></span><span class="bar" style="width:520px"></span></div>
+  <div class="grow fill"></div>
+  <div class="overlay">
+    <div class="box modal col" style="gap:10px; align-items:center; text-align:center">
+      <div class="img" style="width:64px; height:64px; border-radius:50%"></div>
+      <div class="h2">Revisa tu correo</div>
+      <div class="muted">Enviamos un enlace de confirmación a tu correo. Ábrelo para activar tu cuenta y poder iniciar sesión.</div>
+      <span class="btn primary" data-go="login">Ir a iniciar sesión</span>
+    </div>
+  </div>
+</section>
+
+<!-- CHAT (NUEVA CONSULTA) -->
+<section class="screen" id="s-chat">
+  <div class="topbar"><span>☰</span><div class="logo" data-go="inicio"><i class="img"></i>LEGALFAM</div><span class="muted">| Consulta Actual</span>
+    <span class="grow"></span><span class="pill" data-go="planes">Plan gratuito · 50/50 tokens</span><span class="lang">ES ▾</span><span data-go="inicio">⇥</span></div>
+  <div class="chat">
+    <aside class="side">
+      <span class="btn" data-go="chat">＋ Nueva consulta</span>
+      <div class="field">⌕ Buscar consulta...</div>
+      <div class="eyebrow" style="margin-top:6px">Historial</div>
+      <div class="muted" style="text-align:center; margin-top:40px">No hay consultas aún.<br>Haz tu primera pregunta.</div>
+      <span class="grow"></span>
+      <div class="muted">▸ Mostrar glosario</div>
+      <div class="row box" style="padding:8px" data-go="configuracion"><div class="img" style="width:34px;height:34px;border-radius:50%"></div><div class="col"><b style="font-size:13px">Usuario</b><span class="muted" style="font-size:11px">correo@ejemplo.com</span></div></div>
+    </aside>
+    <div class="main">
+      <div class="msgs">
+        <div class="eyebrow">LegalFam</div>
+        <div class="box bubble" style="max-width:640px">Hola, <b>María</b>. Bienvenido/a a <b>LegalFam</b>.<div class="bar" style="width:90%"></div><div class="bar" style="width:70%"></div>¿Sobre qué situación legal deseas consultar hoy?</div>
+        <div class="muted" style="margin-top:10px">Empieza con una consulta frecuente</div>
+        <div class="row" style="flex-wrap:wrap">
+          <span class="chip" data-go="respuesta">Alimentos</span><span class="chip" data-go="respuesta">Tenencia</span>
+          <span class="chip" data-go="respuesta">Filiación</span><span class="chip" data-go="proteccion">Medidas de protección</span>
+        </div>
+      </div>
+      <div class="input">
+        <div class="row"><div class="field grow" style="height:48px">Escribe tu consulta legal...</div><span class="btn primary" data-go="respuesta">Enviar ➤</span></div>
+        <div class="muted" style="font-size:11px; margin-top:6px">Evita enviar DNI, teléfono, correo o dirección. Los tokens se descuentan cuando la respuesta queda lista.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESPUESTA -->
+<section class="screen" id="s-respuesta">
+  <div class="topbar"><span>☰</span><div class="logo" data-go="inicio"><i class="img"></i>LEGALFAM</div><span class="muted">| Pensión de alimentos</span>
+    <span class="grow"></span><span class="pill" data-go="planes">Plan gratuito · 49/50 tokens</span><span class="lang">ES ▾</span><span data-go="inicio">⇥</span></div>
+  <div class="chat">
+    <aside class="side">
+      <span class="btn" data-go="chat">＋ Nueva consulta</span>
+      <div class="field">⌕ Buscar consulta...</div>
+      <div class="eyebrow" style="margin-top:6px">Historial</div>
+      <div class="box fill" style="padding:8px; font-size:13px">Pensión de alimentos</div>
+      <span class="grow"></span>
+      <div class="muted">▸ Mostrar glosario</div>
+      <div class="row box" style="padding:8px" data-go="configuracion"><div class="img" style="width:34px;height:34px;border-radius:50%"></div><div class="col"><b style="font-size:13px">Usuario</b><span class="muted" style="font-size:11px">correo@ejemplo.com</span></div></div>
+    </aside>
+    <div class="main">
+      <div class="msgs" style="gap:10px">
+        <div class="box bubble me">¿Cómo solicito una pensión de alimentos para mi hijo?</div>
+        <div class="box bubble" style="max-width:820px">
+          <div class="bar" style="width:96%"></div><div class="bar" style="width:88%"></div><div class="bar" style="width:72%"></div>
+          <div class="h3" style="margin-top:10px">Siguientes pasos</div>
+          <div class="muted">1. <span class="bar" style="display:inline-block; width:420px; vertical-align:middle; margin:2px"></span></div>
+          <div class="muted">2. <span class="bar" style="display:inline-block; width:360px; vertical-align:middle; margin:2px"></span></div>
+          <div class="muted">3. <span class="bar" style="display:inline-block; width:300px; vertical-align:middle; margin:2px"></span></div>
+          <div class="h3" style="margin-top:12px">▾ Fuentes utilizadas (2)</div>
+          <div class="src fill"><b style="font-size:13px">Código Civil · Art. 474</b><div class="muted">Texto de la fuente: “<span class="bar" style="display:inline-block; width:380px; vertical-align:middle; margin:0"></span>”</div><div class="muted"><u>Ver fuente ↗</u></div></div>
+          <div class="src fill"><b style="font-size:13px">Código de los Niños y Adolescentes · Art. 92</b><div class="muted"><u>Ver fuente ↗</u></div></div>
+          <div class="row" style="margin-top:12px"><span class="stars">☆☆☆☆☆</span><div class="field grow" style="height:32px; font-size:12px">Comentario opcional sobre la respuesta</div></div>
+        </div>
+      </div>
+      <div class="input">
+        <div class="row"><div class="field grow" style="height:48px">Escribe tu consulta legal...</div><span class="btn primary">Enviar ➤</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESPUESTA CON APOYO ESPECIALIZADO -->
+<section class="screen" id="s-proteccion">
+  <div class="topbar"><span>☰</span><div class="logo" data-go="inicio"><i class="img"></i>LEGALFAM</div><span class="muted">| Medidas de protección</span>
+    <span class="grow"></span><span class="pill" data-go="planes">Plan gratuito · 49/50 tokens</span><span class="lang">ES ▾</span><span data-go="inicio">⇥</span></div>
+  <div class="chat">
+    <aside class="side">
+      <span class="btn" data-go="chat">＋ Nueva consulta</span>
+      <div class="field">⌕ Buscar consulta...</div>
+      <div class="eyebrow" style="margin-top:6px">Historial</div>
+      <div class="box fill" style="padding:8px; font-size:13px">Medidas de protección</div>
+      <span class="grow"></span>
+      <div class="row box" style="padding:8px" data-go="configuracion"><div class="img" style="width:34px;height:34px;border-radius:50%"></div><b style="font-size:13px">Usuario</b></div>
+    </aside>
+    <div class="main">
+      <div class="msgs" style="gap:12px">
+        <div class="box bubble me">¿Cómo solicito medidas de protección por violencia familiar?</div>
+        <div class="alert" style="max-width:820px"><b>⚠ Apoyo especializado recomendado</b><div class="muted">Por el tipo de situación, considera acudir a una entidad especializada como CEM, PNP o DEMUNA, según corresponda.</div>
+          <span class="btn sm" style="margin-top:8px" data-go="contactos">Ver contactos de emergencia</span></div>
+        <div class="box bubble" style="max-width:820px"><div class="bar" style="width:94%"></div><div class="bar" style="width:86%"></div><div class="bar" style="width:60%"></div>
+          <div class="h3" style="margin-top:10px">▸ Fuentes utilizadas (3)</div></div>
+      </div>
+      <div class="input"><div class="row"><div class="field grow" style="height:48px">Escribe tu consulta legal...</div><span class="btn primary">Enviar ➤</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTOS -->
+<section class="screen" id="s-contactos">
+  <div class="topbar"><span data-go="chat">← Volver al chat</span><span class="grow"></span><div class="logo"><i class="img"></i>LEGALFAM</div><span class="grow"></span><span class="lang">ES ▾</span></div>
+  <div class="col" style="padding:24px 120px; gap:12px">
+    <div class="eyebrow">Contactos de emergencia</div>
+    <div class="h2">Canales oficiales para situaciones de emergencia</div>
+    <div class="muted">Si hay riesgo actual para ti, un menor de edad u otra persona, usa los canales de emergencia directamente. LegalFam no contacta instituciones por ti.</div>
+    <div class="alert row"><div class="grow"><div class="eyebrow">Peligro inmediato</div><div class="h3">Llama a la PNP al 105</div><div class="muted">Si la agresión está ocurriendo o existe una amenaza grave, prioriza llamar a emergencias.</div></div><span class="btn primary">☏ Llamar 105</span></div>
+    <div class="row" style="align-items:stretch; gap:14px">
+      <div class="box bubble grow col" style="gap:6px"><div class="h3">Policía Nacional del Perú</div><div class="bar"></div><div class="bar" style="width:70%"></div><span class="btn sm">Llamar al 105</span><span class="btn sm">Ubicar comisaría cercana</span></div>
+      <div class="box bubble grow col" style="gap:6px"><div class="h3">Centros Emergencia Mujer</div><div class="bar"></div><div class="bar" style="width:70%"></div><span class="btn sm">Llamar a Línea 100</span><span class="btn sm">Abrir Chat 100</span></div>
+      <div class="box bubble grow col" style="gap:6px"><div class="h3">DEMUNA</div><div class="bar"></div><div class="bar" style="width:70%"></div><span class="btn sm">Información oficial DEMUNA</span><span class="btn sm">Buscar tu municipalidad</span></div>
+    </div>
+    <div class="box fill bubble"><div class="h3">Antes de contactar</div><div class="bar"></div><div class="bar" style="width:80%"></div></div>
+  </div>
+</section>
+
+<!-- CONFIGURACION -->
+<section class="screen" id="s-configuracion">
+  <div class="topbar"><span data-go="chat">← Volver al chat</span><span class="grow"></span><div class="logo"><i class="img"></i>LEGALFAM</div><span class="grow"></span><span></span></div>
+  <div class="col" style="padding:22px 180px; gap:12px">
+    <div class="eyebrow">Cuenta</div><div class="h2">Configuración</div>
+    <div class="row" style="align-items:stretch; gap:14px">
+      <div class="box bubble grow"><div class="h3">Datos personales</div>
+        <div class="row"><div class="grow"><div class="label">Nombre</div><div class="field">María</div></div><div class="grow"><div class="label">Apellido</div><div class="field">García</div></div></div>
+        <div class="label">Correo electrónico</div><div class="field">correo@ejemplo.com</div><span class="btn sm primary" style="margin-top:10px">Guardar cambios</span></div>
+      <div class="box bubble grow"><div class="h3">Contraseña</div><div class="label">Contraseña nueva</div><div class="field">Mínimo 8 caracteres</div>
+        <div class="label">Confirmar contraseña</div><div class="field">Repite tu contraseña</div><span class="btn sm" style="margin-top:10px">Cambiar contraseña</span></div>
+    </div>
+    <div class="row" style="align-items:stretch; gap:14px">
+      <div class="box bubble grow"><div class="h3">Idioma</div><div class="muted" style="margin:6px 0">◉ Español &nbsp; ○ Runasimi (quechua sureño) &nbsp; ○ Aymara</div></div>
+      <div class="box bubble grow"><div class="h3">Apariencia</div><div class="row" style="margin-top:6px"><div class="box fill grow bubble" style="padding:8px">◉ Clásico</div><div class="box grow bubble" style="padding:8px">○ Moderno</div></div></div>
+    </div>
+    <div class="box bubble row"><div class="grow"><div class="h3">Suscripción</div><div class="muted">Plan actual: Plan gratuito · Tokens disponibles: 50/50</div></div><span class="btn sm" data-go="planes">Ver planes</span></div>
+  </div>
+</section>
+
+</div></div>
+<script>
+  const params = new URLSearchParams(location.search);
+  if (params.has('shot')) document.body.classList.add('shot');
+  const hot = document.getElementById('hot');
+  hot.onchange = () => document.body.classList.toggle('hot', hot.checked);
+  if (params.has('hot')) { hot.checked = true; document.body.classList.add('hot'); }
+  function show() {
+    const id = (location.hash || '#inicio').slice(1);
+    document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === 's-' + id));
+    document.querySelectorAll('.toolbar a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + id));
+  }
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-go]');
+    if (t) location.hash = t.dataset.go;
+  });
+  addEventListener('hashchange', show);
+  show();
+</script>
+</body>
+</html>
